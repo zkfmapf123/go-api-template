@@ -10,7 +10,6 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/IBM/sarama"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 )
 
@@ -29,9 +28,13 @@ func main() {
 	}
 	defer kafkaClient.Close()
 
-	go kafkaClient.ConsumerStart(func(msg *sarama.ConsumerMessage) {
-		log.Printf("Received message: key=%s value=%s", string(msg.Key), string(msg.Value))
-	})
+	// single Consumer
+	// go kafkaClient.ConsumerStart(func(msg *sarama.ConsumerMessage) {
+	// 	log.Printf("[Single Consumer] Received message: key=%s value=%s", string(msg.Key), string(msg.Value))
+	// })
+
+	// batch Listener
+	go kafkaClient.ConsumerBatchListener()
 
 	app.Get("/health",middlewares.LoggerMiddleware(), apis.HealthCheck())
 
