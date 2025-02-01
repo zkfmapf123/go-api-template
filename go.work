@@ -1,0 +1,7 @@
+go 1.23.5
+
+use (
+	./cmd/core
+	./cmd/examples
+	./internal/net
+)
